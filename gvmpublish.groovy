@@ -40,12 +40,12 @@ class GvmPublish implements ApplicationRunner {
 		rest.exchange(releaseRequest, String.class)
 
 		if (version.endsWith("RELEASE")) {
-			def makeDefaultRequest = RequestEntity.post(new URI(url+'/default'))
+			def makeDefaultRequest = RequestEntity.put(new URI(url+'/default'))
 				.header('consumer_key', consumerKey)
 				.header('consumer_token', consumerToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.body('{"candidate": "springboot", "default": "'+version+'"}')
+				.body('{"candidate": "springboot", "default": "' + version + '"}')
 			rest.exchange(makeDefaultRequest, String.class)
 		}
 
