@@ -45,7 +45,7 @@ class GvmPublish implements ApplicationRunner {
 				.header('consumer_token', consumerToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.body('{"candidate": "springboot", "default": "' + version + '"}')
+				.body('{"candidate": "springboot", "version": "' + version + '"}')
 			rest.exchange(makeDefaultRequest, String.class)
 		}
 
