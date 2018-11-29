@@ -13,7 +13,7 @@ class GvmPublish implements ApplicationRunner {
 	@Value('${consumer-key}')
 	String consumerKey
 
-	@Value('${consumer-token}') 
+	@Value('${consumer-token}')
 	String consumerToken
 
 	void run(ApplicationArguments args) {
@@ -22,7 +22,7 @@ class GvmPublish implements ApplicationRunner {
 		Assert.isTrue(args.nonOptionArgs.size() == 1, 'No version provided, use spring run gvmpublish.groovy <version released>')
 		def version = args.nonOptionArgs.get(0)
 		println "About to call GVM API for release ${version}. Press enter to continue"
-		System.in.newReader().readLine() 
+		System.in.newReader().readLine()
 
 		def url = 'https://vendors.sdkman.io'
 		def repo = (version.endsWith('RELEASE') ? 'libs-release-local' : 'libs-milestone-local')
@@ -39,7 +39,7 @@ class GvmPublish implements ApplicationRunner {
 			.body('{"candidate": "springboot", "version": "' + version + '", "url": "' + downloadUrl + '"}')
 		rest.exchange(releaseRequest, String.class)
 
-		if (version.endsWith("RELEASE")) {
+		if (version.startsWith("2.1.") && version.endsWith("RELEASE")) {
 			def makeDefaultRequest = RequestEntity.put(new URI(url+'/default'))
 				.header('consumer_key', consumerKey)
 				.header('consumer_token', consumerToken)
