@@ -26,7 +26,7 @@ class GvmPublish implements ApplicationRunner {
 
 		def url = 'https://vendors.sdkman.io'
 		def repo = (version.endsWith('RELEASE') ? 'libs-release-local' : 'libs-milestone-local')
-		def downloadUrl = "http://repo.spring.io/simple/${repo}/org/springframework/boot/spring-boot-cli/" +
+		def downloadUrl = "https://repo.spring.io/simple/${repo}/org/springframework/boot/spring-boot-cli/" +
 			"${version}/spring-boot-cli-${version}-bin.zip"
 
 		def rest = new RestTemplate();
