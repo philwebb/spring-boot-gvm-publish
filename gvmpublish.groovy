@@ -39,7 +39,7 @@ class GvmPublish implements ApplicationRunner {
 			.body('{"candidate": "springboot", "version": "' + version + '", "url": "' + downloadUrl + '"}')
 		rest.exchange(releaseRequest, String.class)
 
-		if (version.startsWith("2.2.") && version.endsWith("RELEASE")) {
+		if (version.startsWith("2.3.") && version.endsWith("RELEASE")) {
 			def makeDefaultRequest = RequestEntity.put(new URI(url+'/default'))
 				.header('consumer_key', consumerKey)
 				.header('consumer_token', consumerToken)
