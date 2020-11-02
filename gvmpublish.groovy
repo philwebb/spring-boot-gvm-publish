@@ -24,8 +24,9 @@ class GvmPublish implements ApplicationRunner {
 		println "About to call GVM API for release ${version}. Press enter to continue"
 		System.in.newReader().readLine()
 
+		boolean gaRelease = isGaRelease(version)
 		def url = 'https://vendors.sdkman.io'
-		def repo = (version.endsWith('RELEASE') ? 'libs-release-local' : 'libs-milestone-local')
+		def repo = (gaRelease ? 'libs-release-local' : 'libs-milestone-local')
 		def downloadUrl = "https://repo.spring.io/simple/${repo}/org/springframework/boot/spring-boot-cli/" +
 			"${version}/spring-boot-cli-${version}-bin.zip"
 
@@ -39,7 +40,7 @@ class GvmPublish implements ApplicationRunner {
 			.body('{"candidate": "springboot", "version": "' + version + '", "url": "' + downloadUrl + '"}')
 		rest.exchange(releaseRequest, String.class)
 
-		if (version.startsWith("2.3.") && version.endsWith("RELEASE")) {
+		if (version.startsWith("2.3.") && gaRelease) {
 			def makeDefaultRequest = RequestEntity.put(new URI(url+'/default'))
 				.header('consumer_key', consumerKey)
 				.header('consumer_token', consumerToken)
@@ -56,6 +57,12 @@ class GvmPublish implements ApplicationRunner {
 			.accept(MediaType.APPLICATION_JSON)
 				.body('{"candidate": "springboot", "version": "'+version+'", "hashtag": "springboot"}')
 		rest.exchange(broadcastRequest, String.class)
+	}
+
+	private static boolean isGaRelease(String version) {
+		def lastDot = version.lastIndexOf('.')
+		def remaining = version.substring(lastDot +1)
+		return remaining.isNumber() || remaining.equals('RELEASE')
 	}
 
 }
